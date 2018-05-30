@@ -155,6 +155,12 @@ open class JSONWarehouse: Warehouseable, WarehouseCacheable {
 
         let cacheLocation = storageFileUrl()
 
+        // legacy format
+        if let metaDictionary = NSDictionary(contentsOf: cacheLocation),
+            let cache = metaDictionary["storage"] {
+            return cache
+        }
+        
         if let data = try? Data(contentsOf: cacheLocation),
             let metaDictionary = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
             let cache = metaDictionary?["storage"] {
@@ -162,7 +168,7 @@ open class JSONWarehouse: Warehouseable, WarehouseCacheable {
         }
 
         if let data = try? Data(contentsOf: cacheLocation),
-        let metaDictionary = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+            let metaDictionary = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
             let cache = metaDictionary?["storage"] {
             return cache
         }
@@ -171,13 +177,28 @@ open class JSONWarehouse: Warehouseable, WarehouseCacheable {
     }
     
     func cacheExists() -> Bool {
-        guard FileManager.default.fileExists(atPath: storageFileUrl().path),
-            let data = try? Data(contentsOf: storageFileUrl()),
-            let metaDictionary = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
-                return false
+        let storageFileUrl = self.storageFileUrl()
+        
+        guard FileManager.default.fileExists(atPath: storageFileUrl.path) else { return false }
+        
+        var optionalDictionary: [String: Any?]? = nil
+        
+        // legacy format
+        if let dictionary = NSDictionary(contentsOf: storageFileUrl) as? [String: Any?] {
+            optionalDictionary = dictionary
+        }
+        
+        // new format
+        if let data = try? Data(contentsOf: storageFileUrl),
+        let dictionary = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
+            optionalDictionary = dictionary
+        }
+        
+        guard let metaDictionary = optionalDictionary else {
+            return false
         }
 
-        guard let expires = metaDictionary?["expires"] as? TimeInterval else {
+        guard let expires = metaDictionary["expires"] as? TimeInterval else {
             // no expire time means old cache, never expires
             return true
         }
