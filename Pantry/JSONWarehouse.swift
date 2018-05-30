@@ -227,7 +227,7 @@ open class JSONWarehouse: Warehouseable, WarehouseCacheable {
         }
     }
     
-    static var applicationSupportDirectory: URL {
+    public static var applicationSupportDirectory: URL {
         let url = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
         
         let writeDirectory = url.appendingPathComponent("com.thatthinginswift.pantry")
@@ -248,7 +248,7 @@ open class JSONWarehouse: Warehouseable, WarehouseCacheable {
         return applicationSupportLocation
     }
     
-    static var cacheDirectory: URL {
+    public static var cacheDirectory: URL {
         let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
         
         let writeDirectory = url.appendingPathComponent("com.thatthinginswift.pantry")
