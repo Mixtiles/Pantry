@@ -12,7 +12,7 @@ import XCTest
 class EnumTests: XCTestCase {
 
     private static var __once: () = {
-            let testFolder = JSONWarehouse(key: "basic").cacheFileURL().deletingLastPathComponent()
+            let testFolder = JSONWarehouse(storageType: .volatile, key: "basic").cacheFileURL().deletingLastPathComponent()
             print("testing in", testFolder)
 
             // remove old files before our test

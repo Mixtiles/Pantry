@@ -33,7 +33,7 @@ import Foundation
  */
 open class Pantry {
     // Set to a string identifier to enable in memory mode with no persistent caching. Useful for unit testing.
-    open static var enableInMemoryModeWithIdentifier: String?
+    public static var enableInMemoryModeWithIdentifier: String?
 
     // MARK: pack generics
 
@@ -44,7 +44,7 @@ open class Pantry {
      - parameter expires: The storage expiration. Defaults to `Never`
      - parameter storageType: The storage type. Defaults to `.permanent`
      */
-    open static func pack<T: Storable>(_ object: T, key: String, expires: StorageExpiry = .never, storageType: StorageType = .permanent) {
+    public static func pack<T: Storable>(_ object: T, key: String, expires: StorageExpiry = .never, storageType: StorageType = .permanent) {
         let warehouse = getWarehouse(key, storageType: storageType)
         
         warehouse.write(object.toDictionary() as Any, expires: expires)
@@ -56,7 +56,7 @@ open class Pantry {
      - parameter key: The objects' key
      - parameter storageType: The storage type. Defaults to `.permanent`
      */
-    open static func pack<T: Storable>(_ objects: [T], key: String, expires: StorageExpiry = .never, storageType: StorageType = .permanent) {
+    public static func pack<T: Storable>(_ objects: [T], key: String, expires: StorageExpiry = .never, storageType: StorageType = .permanent) {
         let warehouse = getWarehouse(key, storageType: storageType)
         
         var result = [Any]()
@@ -76,7 +76,7 @@ open class Pantry {
      
      - SeeAlso: `StorableDefaultType`
      */
-    open static func pack<T: StorableDefaultType>(_ object: T, key: String, expires: StorageExpiry = .never, storageType: StorageType = .permanent) {
+    public static func pack<T: StorableDefaultType>(_ object: T, key: String, expires: StorageExpiry = .never, storageType: StorageType = .permanent) {
         let warehouse = getWarehouse(key, storageType: storageType)
         
         warehouse.write(object as Any, expires: expires)
@@ -91,7 +91,7 @@ open class Pantry {
 
      - SeeAlso: `StorableDefaultType`
      */
-    open static func pack<T: StorableDefaultType>(_ objects: [T], key: String, expires: StorageExpiry = .never, storageType: StorageType = .permanent) {
+    public static func pack<T: StorableDefaultType>(_ objects: [T], key: String, expires: StorageExpiry = .never, storageType: StorageType = .permanent) {
         let warehouse = getWarehouse(key, storageType: storageType)
         
         var result = [Any]()
@@ -111,7 +111,7 @@ open class Pantry {
 
      - SeeAlso: `StorableDefaultType`
      */
-    open static func pack<T: StorableDefaultType>(_ objects: [T?], key: String, expires: StorageExpiry = .never, storageType: StorageType = .permanent) {
+    public static func pack<T: StorableDefaultType>(_ objects: [T?], key: String, expires: StorageExpiry = .never, storageType: StorageType = .permanent) {
         let warehouse = getWarehouse(key, storageType: storageType)
         
         var result = [Any]()
@@ -131,7 +131,7 @@ open class Pantry {
     - parameter storageType: The storage type. Defaults to `.permanent`
     - returns: T?
     */
-    open static func unpack<T: Storable>(_ key: String, storageType: StorageType = .permanent) -> T? {
+    public static func unpack<T: Storable>(_ key: String, storageType: StorageType = .permanent) -> T? {
         let warehouse = getWarehouse(key, storageType: storageType)
         
         if warehouse.cacheExists() {
@@ -147,7 +147,7 @@ open class Pantry {
      - parameter storageType: The storage type. Defaults to `.permanent`
      - returns: [T]?
      */
-    open static func unpack<T: Storable>(_ key: String, storageType: StorageType = .permanent) -> [T]? {
+    public static func unpack<T: Storable>(_ key: String, storageType: StorageType = .permanent) -> [T]? {
         let warehouse = getWarehouse(key, storageType: storageType)
 
         guard warehouse.cacheExists(),
@@ -172,7 +172,7 @@ open class Pantry {
 
      - SeeAlso: `StorableDefaultType`
      */
-    open static func unpack<T: StorableDefaultType>(_ key: String, storageType: StorageType = .permanent) -> [T]? {
+    public static func unpack<T: StorableDefaultType>(_ key: String, storageType: StorageType = .permanent) -> [T]? {
         let warehouse = getWarehouse(key, storageType: storageType)
         
         guard warehouse.cacheExists(),
@@ -194,7 +194,7 @@ open class Pantry {
 
      - SeeAlso: `StorableDefaultType`
      */
-    open static func unpack<T: StorableDefaultType>(_ key: String, storageType: StorageType = .permanent) -> T? {
+    public static func unpack<T: StorableDefaultType>(_ key: String, storageType: StorageType = .permanent) -> T? {
         let warehouse = getWarehouse(key, storageType: storageType)
 
         guard warehouse.cacheExists(),
@@ -210,7 +210,7 @@ open class Pantry {
      - parameter key: The object's key
      - parameter storageType: The storage type. Defaults to `.permanent`
      */
-    open static func expire(_ key: String, storageType: StorageType = .permanent) {
+    public static func expire(_ key: String, storageType: StorageType = .permanent) {
         let warehouse = getWarehouse(key, storageType: storageType)
 
         warehouse.removeCache()
@@ -222,7 +222,7 @@ open class Pantry {
  
      - Note: This will clear in-memory as well as JSON cache
      */
-    open static func removeAllCache(for storageType: StorageType = .permanent) {
+    public static func removeAllCache(for storageType: StorageType = .permanent) {
         ///Blindly remove all the data!
         MemoryWarehouse.removeAllCache(for: storageType)
         JSONWarehouse.removeAllCache(for: storageType)
@@ -235,7 +235,7 @@ open class Pantry {
      
      - Note: This will clear in-memory as well as JSON cache
      */
-    open static func itemExistsForKey(_ key: String, storageType: StorageType = .permanent) -> Bool {
+    public static func itemExistsForKey(_ key: String, storageType: StorageType = .permanent) -> Bool {
         let warehouse = getWarehouse(key, storageType: storageType)
         return warehouse.cacheExists()
     }

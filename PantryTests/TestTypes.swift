@@ -79,19 +79,6 @@ struct FailingBasic: Storable {
     }
 }
 
-struct FailingNil: Storable {
-    var name: String? = nil
-    var age = 0
-
-    init() {}
-
-    init?(warehouse: Warehouseable) {}
-
-    func toDictionary() -> [String: Any] {
-        return ["name": name, "age": age]
-    }
-}
-
 struct BasicOptional: Storable {
     let lastName: String?
     let dogsAge: Float?

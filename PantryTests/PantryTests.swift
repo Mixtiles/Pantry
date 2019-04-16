@@ -13,7 +13,7 @@ var token: Int = 0
 
 class PantryTests: XCTestCase {
     private static var __once: () = {
-            let testFolder = JSONWarehouse(key: "basic").cacheFileURL().deletingLastPathComponent()
+            let testFolder = JSONWarehouse(storageType: .volatile, key: "basic").cacheFileURL().deletingLastPathComponent()
             print("testing in", testFolder)
             
             // remove old files before our test
@@ -144,15 +144,6 @@ class PantryTests: XCTestCase {
         Pantry.pack(failing, key: "failing")
 
         let unpacked: FailingBasic? = Pantry.unpack("failing")
-        XCTAssert(unpacked == nil)
-    }
-
-    func testNilValuesFails() {
-        let failing = FailingNil()
-        print(failing.toDictionary())
-        Pantry.pack(failing, key: "failing")
-
-        let unpacked: FailingNil? = Pantry.unpack("failing")
         XCTAssert(unpacked == nil)
     }
 
@@ -344,29 +335,18 @@ class PantryTests: XCTestCase {
             XCTAssert(unpackNestedOption1.name == "Wanew", "unpackNestedOption1 field name should have value")
             if let optionals = unpackNestedOption1.optionals {
                 XCTAssert(optionals.count == 3, "unpackNestedOption1 field optionals should have 3 variables")
-                if let optionalValue1: BasicOptional = optionals[0] {
-                    XCTAssert(optionalValue1.lastName == "Jhihguan", "optionalValue1 field lastName should have value")
-                    XCTAssert(optionalValue1.dogsAge == nil, "optionalValue1 field dogsAge should be nil")
-                    XCTAssert(optionalValue1.leastFavoriteNumber == 1, "optionalValue1 field leastFavoriteNumber should have value")
-                } else {
-                    XCTFail("no basicoptional struct at optionals[0]")
-                }
-                
-                if let optionalValue2: BasicOptional = optionals[1] {
-                    XCTAssert(optionalValue2.lastName == "Wane", "optionalValue2 field lastName should have value")
-                    XCTAssert(optionalValue2.dogsAge == 10, "optionalValue2 field dogsAge should have value")
-                    XCTAssert(optionalValue2.leastFavoriteNumber == nil, "optionalValue2 field leastFavoriteNumber should not be nil")
-                } else {
-                    XCTFail("no basicoptional struct at optionals[1]")
-                }
-                
-                if let optionalValue3: BasicOptional = optionals[2] {
-                    XCTAssert(optionalValue3.lastName == nil, "optionalValue3 field lastName should be nil")
-                    XCTAssert(optionalValue3.dogsAge != 10 && optionalValue3.dogsAge == nil, "optionalValue3 field dogsAge should be nil")
-                    XCTAssert(optionalValue3.leastFavoriteNumber != nil, "optionalValue3 field leastFavoriteNumber should have value")
-                } else {
-                    XCTFail("no basicoptional struct at optionals[2]")
-                }
+
+                XCTAssert(optionals[0].lastName == "Jhihguan", "optionalValue1 field lastName should have value")
+                XCTAssert(optionals[0].dogsAge == nil, "optionalValue1 field dogsAge should be nil")
+                XCTAssert(optionals[0].leastFavoriteNumber == 1, "optionalValue1 field leastFavoriteNumber should have value")
+
+                XCTAssert(optionals[1].lastName == "Wane", "optionalValue2 field lastName should have value")
+                XCTAssert(optionals[1].dogsAge == 10, "optionalValue2 field dogsAge should have value")
+                XCTAssert(optionals[1].leastFavoriteNumber == nil, "optionalValue2 field leastFavoriteNumber should not be nil")
+
+                XCTAssert(optionals[2].lastName == nil, "optionalValue3 field lastName should be nil")
+                XCTAssert(optionals[2].dogsAge != 10 && optionals[2].dogsAge == nil, "optionalValue3 field dogsAge should be nil")
+                XCTAssert(optionals[2].leastFavoriteNumber != nil, "optionalValue3 field leastFavoriteNumber should have value")
             } else {
                 XCTFail("nested optional array should have value")
             }
