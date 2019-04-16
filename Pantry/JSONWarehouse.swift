@@ -162,13 +162,13 @@ open class JSONWarehouse: Warehouseable, WarehouseCacheable {
         }
         
         if let data = try? Data(contentsOf: cacheLocation),
-            let metaDictionary = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+            let metaDictionary = ((try? JSONSerialization.jsonObject(with: data) as? [String: Any]) as [String : Any]??),
             let cache = metaDictionary?["storage"] {
             return cache
         }
 
         if let data = try? Data(contentsOf: cacheLocation),
-            let metaDictionary = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+            let metaDictionary = ((try? JSONSerialization.jsonObject(with: data) as? [String: Any]) as [String : Any]??),
             let cache = metaDictionary?["storage"] {
             return cache
         }
@@ -190,7 +190,7 @@ open class JSONWarehouse: Warehouseable, WarehouseCacheable {
         
         // new format
         if let data = try? Data(contentsOf: storageFileUrl),
-        let dictionary = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
+        let dictionary = ((try? JSONSerialization.jsonObject(with: data) as? [String: Any]) as [String : Any]??) {
             optionalDictionary = dictionary
         }
         
